@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 
 namespace Number_Factorizer
 {
@@ -11,9 +12,12 @@ namespace Number_Factorizer
         {
             while (true)
             {
-                string input = GetInput();
+                Stopwatch stopwatch = new Stopwatch();
+                string input = GetInput(); 
+                stopwatch.Start();
                 factors = FactorizeNumbers(Convert.ToUInt64(input));
                 Console.WriteLine("Result: " + string.Join(" * ", factors));
+                Console.WriteLine("Elapsed time: " + stopwatch.ElapsedMilliseconds + "ms");
                 Console.ReadLine();
                 Console.Clear();
             }
@@ -70,15 +74,16 @@ namespace Number_Factorizer
         }
         private static bool IsPrime(ulong num)
         {
-            if (num < 2)
+            if (num <= 1)
                 return false;
-            if (num % 2 == 0)
-                return num == 2;
+            if (num <= 3)
+                return true;
+            if (num % 2 == 0 || num % 3 == 0)
+                return false;
 
-            ulong root = (ulong)Math.Sqrt(num);
-            for (ulong j = 3; j <= root; j += 2)
+            for (ulong i = 5; i * i <= num; i += 6)
             {
-                if (num % j == 0)
+                if (num % i == 0 || num % (i + 2) == 0)
                     return false;
             }
             return true;
